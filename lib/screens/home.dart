@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluapp/screens/overview.dart'; // Import the overview page
+import 'package:fluapp/screens/friends.dart';
 
 class MoodTrackerHome extends StatefulWidget {
   const MoodTrackerHome({super.key});
@@ -15,7 +15,7 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Log Mood View Slider"),
+        title: const Text("Log Mood View"),
         centerTitle: true,
       ),
       body: Padding(
@@ -38,7 +38,6 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-            // Placeholder for the image box
             Container(
               height: 200,
               width: 200,
@@ -52,7 +51,6 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
               ),
             ),
             const SizedBox(height: 40),
-            // Mood slider
             Slider(
               value: _currentSliderValue,
               min: 0,
@@ -68,18 +66,9 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
               },
             ),
             const SizedBox(height: 20),
-            // Continue Button
             ElevatedButton(
               onPressed: () {
-                // Navigate to the OverviewScreen with the slider value
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OverviewScreen(
-                      moodValue: _currentSliderValue.round(),
-                    ),
-                  ),
-                );
+                _navigateToFriends(context);
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
@@ -95,6 +84,28 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Method to navigate with a fade transition
+  void _navigateToFriends(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => FriendsScreen(moodValue: _currentSliderValue.round()),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0); // Slide from bottom
+          const end = Offset.zero;
+          const curve = Curves.ease;
+
+          final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
       ),
     );
   }

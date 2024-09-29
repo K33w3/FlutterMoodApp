@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluapp/screens/home.dart'; // Import the home screen
+import 'package:fluapp/screens/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MoodTrackerHome(), // Entry point: Home screen with slider
-      debugShowCheckedModeBanner: false, // This removes the debug banner
+      home: const MoodTrackerHome(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
