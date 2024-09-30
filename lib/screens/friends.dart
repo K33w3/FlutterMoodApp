@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:fluapp/screens/hug.dart'; // Import HugScreen for navigation
 
-class FriendsScreen extends StatefulWidget {
-  const FriendsScreen({super.key});
+class FriendsScreen extends StatelessWidget {
+  final int moodValue;
+  final Function(String) onFriendSelected;
 
-  @override
-  _FriendsScreenState createState() => _FriendsScreenState();
-}
-
-class _FriendsScreenState extends State<FriendsScreen> {
-  bool hasNavigated = false; // Flag to check if navigation has occurred
+  const FriendsScreen({
+    super.key,
+    required this.moodValue,
+    required this.onFriendSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,65 +17,26 @@ class _FriendsScreenState extends State<FriendsScreen> {
         title: const Text('Friends'),
         centerTitle: true,
       ),
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (scrollNotification) {
-          if (scrollNotification is ScrollEndNotification) {
-            // Check if the user has scrolled to the end of the scroll view
-            if (scrollNotification.metrics.pixels >=
-                    scrollNotification.metrics.maxScrollExtent &&
-                !hasNavigated) {
-              // Set flag to true to prevent multiple navigations
-              hasNavigated = true;
-
-              // Navigate to HugScreen when scrolled to the bottom
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const HugScreen(
-                          recipientName: 'Noah',
-                        )),
-              ).then((_) {
-                // Reset flag when returning to Friends page
-                hasNavigated = false;
-              });
-              return true; // Stop further processing of the notification
-            }
-          }
-          return false; // Allow further processing of the notification
-        },
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Friend list items
-                FriendTile(name: "FRIEND 1"),
-                FriendTile(name: "FRIEND 2"),
-                FriendTile(name: "FRIEND 3"),
-                FriendTile(name: "FRIEND 4"),
-                const SizedBox(height: 40),
-                // Pagination dots
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    CircleAvatar(backgroundColor: Colors.grey, radius: 6),
-                    SizedBox(width: 8),
-                    CircleAvatar(backgroundColor: Colors.grey, radius: 6),
-                    SizedBox(width: 8),
-                    CircleAvatar(backgroundColor: Colors.grey, radius: 6),
-                  ],
-                ),
-                const SizedBox(height: 40),
-                // Downward arrow
-                const Icon(
-                  Icons.arrow_downward,
-                  size: 50,
-                ),
-                const SizedBox(height: 1000), // Extend the scrollable content
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: <Widget>[
+            const Text(
+              "How are your friends doing today?",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
+            const SizedBox(height: 20),
+            // Friend list items with clear hug interaction
+            FriendTile(name: "FRIEND 1", onFriendSelected: onFriendSelected),
+            FriendTile(name: "FRIEND 2", onFriendSelected: onFriendSelected),
+            FriendTile(name: "FRIEND 3", onFriendSelected: onFriendSelected),
+            FriendTile(name: "FRIEND 4", onFriendSelected: onFriendSelected),
+          ],
         ),
       ),
     );
@@ -86,24 +46,57 @@ class _FriendsScreenState extends State<FriendsScreen> {
 // FriendTile widget for each friend
 class FriendTile extends StatelessWidget {
   final String name;
+  final Function(String) onFriendSelected;
 
-  const FriendTile({Key? key, required this.name}) : super(key: key);
+  const FriendTile({
+    super.key,
+    required this.name,
+    required this.onFriendSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: ListTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.grey,
-            child: Icon(Icons.person),
+    return GestureDetector(
+      onTap: () {
+        onFriendSelected(name);
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.lightBlueAccent.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: Colors.blueAccent, width: 1.5),
           ),
-          title: Text(name),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const CircleAvatar(
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    name,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const Row(
+                children: [
+                  Icon(Icons.favorite, color: Colors.pink), // Hug icon
+                  SizedBox(width: 8),
+                  Text(
+                    'Send a Hug',
+                    style: TextStyle(fontSize: 16, color: Colors.blueAccent),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
