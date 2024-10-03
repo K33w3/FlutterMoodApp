@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ml_algo: ^16.17.13
+  ml_dataframe: ^1.6.0
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -88,3 +92,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
+
