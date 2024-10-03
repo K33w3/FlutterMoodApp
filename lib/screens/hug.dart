@@ -16,9 +16,10 @@ class HugScreen extends StatelessWidget {
       // Added a background image
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/hug_background.jpg'),
-            fit: BoxFit.cover,
+          gradient: LinearGradient(
+            colors: [Color(0xFF89CFF0), Color(0xFFE0FFFF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Center(

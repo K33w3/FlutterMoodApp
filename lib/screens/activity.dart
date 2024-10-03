@@ -39,16 +39,16 @@ class ActivityScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFFEF9E7), Color(0xFFFFF3E0)],
+            colors: [Color(0xFFE0FFFF), Color(0xFF89CFF0)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               const Text(
                 'Activity Recommendations',
                 style: TextStyle(
@@ -63,7 +63,7 @@ class ActivityScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20)),
                 elevation: 5,
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
                       Text(
@@ -94,16 +94,15 @@ class ActivityScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               const Text(
-                'Suggested activities based on your mood trends:',
+                'Suggestions based on your mood trends:',
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87), // Changed text color
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: recommendations.length,
@@ -114,7 +113,7 @@ class ActivityScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15)),
                       elevation: 3,
                       margin: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 5.0),
+                          vertical: 7.0, horizontal: 5.0),
                       child: ListTile(
                         leading: const Icon(Icons.lightbulb_outline,
                             color: Colors.orange),
@@ -143,8 +142,7 @@ class ActivityScreen extends StatelessWidget {
 
     // Recommendations based on average mood
     if (averageMood <= 4) {
-      recommendations.add(
-          'Your average mood has been low. Consider self-care activities.');
+      recommendations.add('Consider self-care activities to improve your mood.');
       recommendations.add('Reach out to friends or family for support.');
       recommendations
           .add('Engage in relaxing activities like meditation or yoga.');

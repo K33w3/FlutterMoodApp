@@ -13,11 +13,10 @@ class FriendsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Replaced background image with gradient
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF89CFF0), Color(0xFFE0FFFF)],
+            colors: [Color(0xFFE0FFFF), Color(0xFF89CFF0)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
