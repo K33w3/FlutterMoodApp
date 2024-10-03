@@ -13,29 +13,50 @@ class FriendsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Friends'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      // Replaced background image with gradient
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF89CFF0), Color(0xFFE0FFFF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Column(
-          children: <Widget>[
+          children: [
+            AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: const Text('Friends',
+                  style: TextStyle(color: Colors.black87)),
+              // Changed text color
+              centerTitle: true,
+              iconTheme: const IconThemeData(
+                  color: Colors.black87), // Changed icon color
+            ),
+            const SizedBox(height: 20),
             const Text(
               "How are your friends doing today?",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+                color: Colors.black87, // Changed text color to darker
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            // Friend list items with clear hug interaction
-            FriendTile(name: "FRIEND 1", onFriendSelected: onFriendSelected),
-            FriendTile(name: "FRIEND 2", onFriendSelected: onFriendSelected),
-            FriendTile(name: "FRIEND 3", onFriendSelected: onFriendSelected),
-            FriendTile(name: "FRIEND 4", onFriendSelected: onFriendSelected),
+            // Friend list items with placeholder icons
+            Expanded(
+              child: ListView(
+                children: [
+                  FriendTile(name: "Alice", onFriendSelected: onFriendSelected),
+                  FriendTile(name: "Bob", onFriendSelected: onFriendSelected),
+                  FriendTile(
+                      name: "Charlie", onFriendSelected: onFriendSelected),
+                  FriendTile(name: "Diana", onFriendSelected: onFriendSelected),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -61,40 +82,37 @@ class FriendTile extends StatelessWidget {
         onFriendSelected(name);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.lightBlueAccent.withOpacity(0.1),
+            color: Colors.white.withOpacity(0.8),
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.blueAccent, width: 1.5),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4.0,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, color: Colors.white),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              const CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.grey,
+                child: Icon(Icons.person,
+                    size: 30, color: Colors.white), // Placeholder icon
               ),
-              const Row(
-                children: [
-                  Icon(Icons.favorite, color: Colors.pink), // Hug icon
-                  SizedBox(width: 8),
-                  Text(
-                    'Send a Hug',
-                    style: TextStyle(fontSize: 16, color: Colors.blueAccent),
-                  ),
-                ],
+              const SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  name,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
+              const Icon(Icons.favorite, color: Colors.pink, size: 30),
             ],
           ),
         ),

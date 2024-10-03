@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class AnalyScreen extends StatelessWidget {
@@ -6,83 +7,187 @@ class AnalyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Sample data for demonstration
-    final List<double> moodData = [0.7, 0.5, 0.3, 0.9];
+    final List<MoodData> moodData = [
+      const MoodData(day: 'Mon', moodValue: 7),
+      const MoodData(day: 'Tue', moodValue: 5),
+      const MoodData(day: 'Wed', moodValue: 8),
+      const MoodData(day: 'Thu', moodValue: 6),
+      const MoodData(day: 'Fri', moodValue: 7),
+      const MoodData(day: 'Sat', moodValue: 9),
+      const MoodData(day: 'Sun', moodValue: 8),
+    ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Statistics'),
+        title: const Text('Your Statistics',
+            style: TextStyle(color: Colors.black87)),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black87),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Your Statistics',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFE0F7FA), Color(0xFFE1BEE7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 10),
+              const Text(
+                'Your Mood Over the Last Week',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Mood Chart
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: BarChart(
+                    BarChartData(
+                      alignment: BarChartAlignment.spaceAround,
+                      maxY: 10,
+                      barTouchData: BarTouchData(
+                        enabled: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          tooltipBgColor: Colors.white,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            return BarTooltipItem(
+                              '${moodData[groupIndex].day}\n',
+                              const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Mood: ${rod.toY.round()}',
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
+                        topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              final day = moodData[value.toInt()].day;
+                              return Text(
+                                day,
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              );
+                            },
+                            reservedSize: 28,
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 2,
+                            getTitlesWidget: (double value, TitleMeta meta) {
+                              return Text(
+                                value.toInt().toString(),
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 14,
+                                ),
+                              );
+                            },
+                            reservedSize: 35,
+                          ),
+                        ),
+                      ),
+                      gridData: FlGridData(
+                        show: true,
+                        horizontalInterval: 2,
+                        drawVerticalLine: false,
+                        getDrawingHorizontalLine: (value) {
+                          return FlLine(
+                            color: Colors.black12,
+                            strokeWidth: 1,
+                          );
+                        },
+                      ),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      barGroups: moodData.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final data = entry.value;
+                        return BarChartGroupData(
+                          x: index,
+                          barRods: [
+                            BarChartRodData(
+                              toY: data.moodValue.toDouble(),
+                              color: Colors.blueAccent,
+                              width: 22,
+                              borderRadius: BorderRadius.circular(6),
+                              backDrawRodData: BackgroundBarChartRodData(
+                                show: true,
+                                toY: 10,
+                                color: Colors.blueAccent.withOpacity(0.1),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.grey,
-                      child: Icon(Icons.person, size: 30, color: Colors.white),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'User Profile Picture',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 2,
-              children: const <Widget>[
-                StatCard(title: 'Total Days', value: '109'),
-                StatCard(title: 'Streak', value: '1'),
-                StatCard(title: 'Best Streak', value: '9'),
-                StatCard(title: 'Hugs Sent', value: '19'),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Your Mood Over Time',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
-            ),
-            const SizedBox(height: 20),
-            // Display mood bars
-            Expanded(
-              child: ListView.builder(
-                itemCount: moodData.length,
-                itemBuilder: (context, index) {
-                  return MoodBar(
-                    day: 'Day ${index + 1}',
-                    percentage: moodData[index],
-                  );
-                },
+              const SizedBox(height: 20),
+              GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 2,
+                children: const <Widget>[
+                  StatCard(title: 'Total Days', value: '109'),
+                  StatCard(title: 'Streak', value: '1'),
+                  StatCard(title: 'Best Streak', value: '9'),
+                  StatCard(title: 'Hugs Sent', value: '19'),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+// Data model for mood chart
+class MoodData {
+  final String day;
+  final int moodValue;
+
+  const MoodData({required this.day, required this.moodValue});
 }
 
 // Widget for Statistics Cards
@@ -94,61 +199,32 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blueAccent.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.blueAccent, width: 1.5),
-      ),
+    return Card(
+      color: Colors.white.withOpacity(0.9),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 3,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                value,
+                style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                title,
+                style: const TextStyle(fontSize: 16, color: Colors.blueGrey),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-// Widget for Mood Bars
-class MoodBar extends StatelessWidget {
-  final String day;
-  final double percentage;
-
-  const MoodBar({super.key, required this.day, required this.percentage});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            day,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 5),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: LinearProgressIndicator(
-              value: percentage,
-              backgroundColor: Colors.grey[300],
-              color: Colors.blueAccent,
-              minHeight: 20,
-            ),
-          ),
-        ],
       ),
     );
   }
