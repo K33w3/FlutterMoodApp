@@ -12,14 +12,13 @@ class MoodTrackerHome extends StatefulWidget {
 }
 
 class _MoodTrackerHomeState extends State<MoodTrackerHome> {
-  double _currentSliderValue = 5;
+  double _currentSliderValue = 7;
   String? recipientName;
   final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Added a gradient background
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

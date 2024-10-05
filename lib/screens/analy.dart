@@ -18,18 +18,10 @@ class AnalyScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Statistics',
-            style: TextStyle(color: Colors.black87)),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black87),
-      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFE0F7FA), Color(0xFFE1BEE7)],
+            colors: [Color(0xFF89CFF0), Color(0xFFE0FFFF)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -38,7 +30,7 @@ class AnalyScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
               const Text(
                 'Your Mood Over the Last Week',
                 style: TextStyle(
