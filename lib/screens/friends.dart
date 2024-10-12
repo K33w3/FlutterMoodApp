@@ -4,19 +4,19 @@ import 'dart:math';
 // Simulated data for friends' moods over the past 7 days
 final List<Map<String, dynamic>> friendsData = [
   {
-    'name': 'FRIEND 1',
+    'name': 'Alice',
     'moods': [5, 5, 6, 4, 3, 2, 1] // Friend has been feeling worse
   },
   {
-    'name': 'FRIEND 2',
+    'name': 'Bob',
     'moods': [8, 7, 8, 9, 8, 7, 8] // Friend has been stable and good
   },
   {
-    'name': 'FRIEND 3',
+    'name': 'Charlie',
     'moods': [3, 3, 4, 3, 2, 1, 1] // Friend needs attention (consecutive low)
   },
   {
-    'name': 'FRIEND 4',
+    'name': 'Diana',
     'moods': [7, 8, 6, 5, 6, 7, 8] // Slight up and down but overall good
   },
 ];
@@ -31,9 +31,8 @@ class FriendsScreen extends StatelessWidget {
 
   // Function to calculate the "hug need" score
   int calculateHugNeed(List<int> moods) {
-    // This logic can be expanded with more AI patterns in the future.
     int hugScore = 0;
-    
+
     for (int i = 1; i < moods.length; i++) {
       if (moods[i] < moods[i - 1]) {
         hugScore++; // If mood is declining, add to hug score
@@ -66,36 +65,53 @@ class FriendsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Friends'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: <Widget>[
-            const Text(
-              "How are your friends doing today?",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueAccent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFE0FFFF), Color(0xFF89CFF0)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: <Widget>[
+              AppBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                title: const Text('Friends', style: TextStyle(color: Colors.black87)),
+                centerTitle: true,
+                iconTheme: const IconThemeData(color: Colors.black87),
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            // Loop through friends' data and display each friend's status
-            ...friendsData.map((friend) {
-              List<int> moods = friend['moods'];
-              int hugScore = calculateHugNeed(moods);
-              return FriendTile(
-                name: friend['name'],
-                moodColor: getMoodColor(hugScore),
-                shouldShake: shouldShake(hugScore),
-                onFriendSelected: onFriendSelected,
-              );
-            }).toList(),
-          ],
+              const SizedBox(height: 20),
+              const Text(
+                "How are your friends doing today?",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87, // Changed text color
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                // Loop through friends' data and display each friend's status
+                child: ListView(
+                  children: friendsData.map((friend) {
+                    List<int> moods = friend['moods'];
+                    int hugScore = calculateHugNeed(moods);
+                    return FriendTile(
+                      name: friend['name'],
+                      moodColor: getMoodColor(hugScore),
+                      shouldShake: shouldShake(hugScore),
+                      onFriendSelected: onFriendSelected,
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -130,22 +146,29 @@ class FriendTile extends StatelessWidget {
           curve: shouldShake ? Curves.elasticIn : Curves.easeInOut,
           transform: shouldShake
               ? (Matrix4.translationValues(
-                  Random().nextDouble() * 10 - 5, 0, 0)) // Shake effect
+              Random().nextDouble() * 10 - 5, 0, 0)) // Shake effect
               : Matrix4.identity(),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: moodColor.withOpacity(0.1),
+            color: Colors.white, // Set background to white
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: moodColor, width: 1.5),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+            border: Border.all(color: moodColor, width: 1.5), // Use moodColor for border
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, color: Colors.white),
+                  CircleAvatar(
+                    backgroundColor: moodColor, // Change the CircleAvatar color based on mood
+                    child: const Icon(Icons.person, color: Colors.white),
                   ),
                   const SizedBox(width: 10),
                   Text(
@@ -153,14 +176,15 @@ class FriendTile extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black87, // Ensure the text color is readable on a white background
                     ),
                   ),
                 ],
               ),
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.favorite, color: Colors.pink), // Hug icon
-                  SizedBox(width: 8),
+                  const Icon(Icons.favorite, color: Colors.pink), // Hug icon
+                  const SizedBox(width: 8),
                   Text(
                     'Send a Hug',
                     style: TextStyle(fontSize: 16, color: Colors.blueAccent),
