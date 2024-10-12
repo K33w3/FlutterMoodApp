@@ -76,9 +76,9 @@ class AnalyScreen extends StatelessWidget {
                       ),
                       titlesData: FlTitlesData(
                         show: true,
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false)),
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false)),
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
@@ -119,7 +119,7 @@ class AnalyScreen extends StatelessWidget {
                         horizontalInterval: 2,
                         drawVerticalLine: false,
                         getDrawingHorizontalLine: (value) {
-                          return FlLine(
+                          return const FlLine(
                             color: Colors.black12,
                             strokeWidth: 1,
                           );

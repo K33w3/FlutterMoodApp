@@ -1,7 +1,6 @@
 import 'package:fluapp/screens/activity.dart';
 import 'package:fluapp/screens/analy.dart';
 import 'package:fluapp/screens/friends.dart';
-import 'package:fluapp/screens/hug.dart';
 import 'package:flutter/material.dart';
 
 class MoodTrackerHome extends StatefulWidget {
@@ -29,7 +28,7 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
         ),
         child: PageView(
           controller: _pageController,
-          scrollDirection: Axis.vertical,
+          scrollDirection: Axis.vertical, // Scrolling is enabled
           children: [
             // Mood Slider View
             Padding(
@@ -42,7 +41,7 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87, // Changed text color to darker
+                      color: Colors.black87,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -50,7 +49,6 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
                   const Text(
                     'Slide to select your mood',
                     style: TextStyle(fontSize: 18, color: Colors.black54),
-                    // Changed text color to darker
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
@@ -68,12 +66,9 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
                       overlayShape:
                           const RoundSliderOverlayShape(overlayRadius: 24.0),
                       activeTrackColor: Colors.black87,
-                      // Changed to darker color
                       inactiveTrackColor: Colors.black26,
-                      // Changed to darker color
                       thumbColor: Colors.black87,
-                      // Changed to darker color
-                      overlayColor: Colors.black26, // Changed to darker color
+                      overlayColor: Colors.black26,
                     ),
                     child: Slider(
                       value: _currentSliderValue,
@@ -91,33 +86,23 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
                   const SizedBox(height: 20),
                   const Text(
                     'Scroll down to continue',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54), // Changed text color to darker
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ],
               ),
             ),
             // Friends Screen
             FriendsScreen(
-
               onFriendSelected: (String name) {
                 setState(() {
                   recipientName = name;
                 });
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
               },
             ),
-            // Hug Screen
-            HugScreen(
-              recipientName: recipientName ?? '',
+            // Activity Screen
+            ActivityScreen(
               moodValue: _currentSliderValue.round(),
             ),
-            // Activity Screen
-            ActivityScreen(moodValue: _currentSliderValue.round()),
             // Analytics Screen
             const AnalyScreen(),
           ],
