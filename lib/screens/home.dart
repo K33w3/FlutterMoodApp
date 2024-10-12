@@ -100,7 +100,7 @@ class _MoodTrackerHomeState extends State<MoodTrackerHome> {
             ),
             // Friends Screen
             FriendsScreen(
-              moodValue: _currentSliderValue.round(),
+
               onFriendSelected: (String name) {
                 setState(() {
                   recipientName = name;
